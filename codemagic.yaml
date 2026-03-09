@@ -1,7 +1,7 @@
 workflows:
   ios-build:
     name: Invernadero AR iOS Build
-    max_build_duration: 120  # minutos máximos
+    max_build_duration: 180  # minutos máximos
     instance_type: mac_mini_m2  # máquina rápida y barata para pruebas
     #integrations:
       #app_store_connect: codemagic  # o el nombre de tu integración Apple
@@ -15,11 +15,32 @@ workflows:
         XCODE_PROJECT: "Unity-iPhone.xcodeproj"  # nombre por defecto de Unity para iOS
         BUNDLE_ID: "com.ceaa.invernadero"  # cambia al de tu Player Settings
     scripts:
+      - name: Obtener versión Unity del proyecto
+        script: |
+          UNITY_VERSION=$(sed -n '1p' ProjectSettings/ProjectVersion.txt | cut -c 18-)
+          UNITY_VERSION_CHANGESET=$(sed -n '2p' ProjectSettings/ProjectVersion.txt | grep -o '$$   ([^)]*)   $$' | tr -d '()')
+          echo "UNITY_VERSION=$UNITY_VERSION" >> $CM_ENV
+          echo "UNITY_VERSION_CHANGESET=$UNITY_VERSION_CHANGESET" >> $CM_ENV
+          echo "UNITY_HOME=/Applications/Unity/Hub/Editor/$UNITY_VERSION/Unity.app" >> $CM_ENV
+
+      - name: Instalar Unity versión custom con Hub CLI
+        script: |
+          yes Y | /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install --version $UNITY_VERSION --changeset $UNITY_VERSION_CHANGESET -a arm64
+          yes Y | /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install-modules --version $UNITY_VERSION -m ios -a arm64
       #- name: Activate Unity license (si necesitas licencia pro; opcional para personal)
         #script: |
         #unity-activate.sh
       - name: Build Unity para iOS
-        script: $UNITY_HOME/Contents/MacOS/Unity -batchmode -nographics -projectPath . -buildTarget iOS -logFile unity-ios-build.log -quit
+        script: |
+          /Applications/Unity/Hub/Editor/$UNITY_VERSION/Unity.app/Contents/MacOS/Unity \
+            -batchmode \
+            -nographics \
+            -silent-crashes \
+            -logFile unity_build.log \
+            -projectPath $UNITY_PROJECT_PATH \
+            -buildTarget iOS \
+            -executeMethod BuildScript.BuildiOS \
+            -quit
       - name: Instalar pods si usas (opcional para AR Foundation simple)
         script: |
           cd $XCODE_PROJECT/..
