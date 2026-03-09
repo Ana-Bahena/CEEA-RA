@@ -14,9 +14,9 @@ workflows:
         XCODE_PROJECT: "Unity-iPhone.xcodeproj"  # nombre por defecto de Unity para iOS
         BUNDLE_ID: "com.ceaa.invernadero"  # cambia al de tu Player Settings
     scripts:
-      - name: Activate Unity license (si necesitas licencia pro; opcional para personal)
-        script: |
-          unity-activate.sh
+      #- name: Activate Unity license (si necesitas licencia pro; opcional para personal)
+        #script: |
+        #unity-activate.sh
       - name: Build Unity para iOS
         script: |
           $UNITY_HOME/Contents/MacOS/Unity \
