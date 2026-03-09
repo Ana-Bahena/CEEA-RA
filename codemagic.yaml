@@ -7,7 +7,7 @@ workflows:
       #app_store_connect: codemagic  # o el nombre de tu integración Apple
     environment:
       #unity: 6000.0.69f1  # tu versión exacta de Unity 6; ajusta si es diferente
-      unity: 6000.0.0
+      unity: 6000.3.10f1
       groups:
         - app_store_credentials  # si tienes variables de Apple
       vars:
