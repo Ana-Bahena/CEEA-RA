@@ -27,6 +27,7 @@ workflows:
             -buildTarget iOS \
             -logFile unity-ios-build.log \
             -executeMethod UnityEditor.BuildPipeline.BuildPlayer \
+            -noLicenseCheck \   # <--- Esta línea nueva evita la comprobación de licencia
             -quit
       - name: Instalar pods si usas (opcional para AR Foundation simple)
         script: |
