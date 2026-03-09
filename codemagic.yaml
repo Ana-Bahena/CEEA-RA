@@ -20,7 +20,6 @@ workflows:
       - name: Build Unity para iOS
         script: |
           $UNITY_HOME/Contents/MacOS/Unity \
-            -quit \
             -batchmode \
             -nographics \
             -projectPath $UNITY_PROJECT_PATH \
