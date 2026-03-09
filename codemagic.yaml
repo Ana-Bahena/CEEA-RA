@@ -1,0 +1,42 @@
+workflows:
+  ios-build:
+    name: Invernadero AR iOS Build
+    max_build_duration: 120  # minutos máximos
+    instance_type: mac_mini_m2  # máquina rápida y barata para pruebas
+    integrations:
+      app_store_connect: codemagic  # o el nombre de tu integración Apple
+    environment:
+      unity: 6000.0.69f1  # tu versión exacta de Unity 6; ajusta si es diferente
+      groups:
+        - app_store_credentials  # si tienes variables de Apple
+      vars:
+        UNITY_PROJECT_PATH: "."  # si tu proyecto Unity está en la raíz del repo
+        XCODE_PROJECT: "Unity-iPhone.xcodeproj"  # nombre por defecto de Unity para iOS
+        BUNDLE_ID: "com.ceaa.invernadero"  # cambia al de tu Player Settings
+    scripts:
+      - name: Activate Unity license (si necesitas licencia pro; opcional para personal)
+        script: |
+          unity-activate.sh
+      - name: Build Unity para iOS
+        script: |
+          $UNITY_HOME/Contents/MacOS/Unity \
+            -quit \
+            -batchmode \
+            -nographics \
+            -projectPath $UNITY_PROJECT_PATH \
+            -buildTarget iOS \
+            -logFile unity-ios-build.log \
+            -executeMethod UnityEditor.BuildPipeline.BuildPlayer \
+            -quit
+      - name: Instalar pods si usas (opcional para AR Foundation simple)
+        script: |
+          cd $XCODE_PROJECT/..
+          pod install || true
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false  # cambia a true cuando estés lista para TestFlight
+        # apple_id: anabahena263@gmail.com  # opcional si usas API key
