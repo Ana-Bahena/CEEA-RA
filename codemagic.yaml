@@ -39,7 +39,7 @@ workflows:
             -logFile unity_build.log \
             -projectPath $UNITY_PROJECT_PATH \
             -buildTarget iOS \
-            -executeMethod BuildScript.BuildiOS \
+            "$UNITY_HOME/Contents/MacOS/Unity" \
             -quit
       - name: Instalar pods si usas (opcional para AR Foundation simple)
         script: |
