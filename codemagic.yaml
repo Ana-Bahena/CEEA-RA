@@ -1,7 +1,7 @@
 workflows:
   ios-build:
     name: Invernadero AR iOS Build
-    max_build_duration: 180  # minutos máximos
+    max_build_duration: 120  # minutos máximos
     instance_type: mac_mini_m2  # máquina rápida y barata para pruebas
     #integrations:
       #app_store_connect: codemagic  # o el nombre de tu integración Apple
