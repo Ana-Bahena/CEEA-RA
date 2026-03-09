@@ -3,8 +3,8 @@ workflows:
     name: Invernadero AR iOS Build
     max_build_duration: 120  # minutos máximos
     instance_type: mac_mini_m2  # máquina rápida y barata para pruebas
-    integrations:
-      app_store_connect: codemagic  # o el nombre de tu integración Apple
+    #integrations:
+      #app_store_connect: codemagic  # o el nombre de tu integración Apple
     environment:
       unity: 6000.0.69f1  # tu versión exacta de Unity 6; ajusta si es diferente
       groups:
@@ -35,8 +35,8 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-    publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: false  # cambia a true cuando estés lista para TestFlight
+    #publishing:
+      #app_store_connect:
+        #auth: integration
+        #submit_to_testflight: false  # cambia a true cuando estés lista para TestFlight
         # apple_id: anabahena263@gmail.com  # opcional si usas API key
