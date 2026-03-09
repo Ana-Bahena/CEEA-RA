@@ -6,7 +6,8 @@ workflows:
     #integrations:
       #app_store_connect: codemagic  # o el nombre de tu integración Apple
     environment:
-      unity: 6000.0.69f1  # tu versión exacta de Unity 6; ajusta si es diferente
+      #unity: 6000.0.69f1  # tu versión exacta de Unity 6; ajusta si es diferente
+      unity: 6000.0.0
       groups:
         - app_store_credentials  # si tienes variables de Apple
       vars:
@@ -18,16 +19,7 @@ workflows:
         #script: |
         #unity-activate.sh
       - name: Build Unity para iOS
-        script: |
-          $UNITY_HOME/Contents/MacOS/Unity \
-            -batchmode \
-            -nographics \
-            -projectPath $UNITY_PROJECT_PATH \
-            -buildTarget iOS \
-            -logFile unity-ios-build.log \
-            -executeMethod UnityEditor.BuildPipeline.BuildPlayer \
-            -noLicenseCheck \   # <--- Esta línea nueva evita la comprobación de licencia
-            -quit
+        script: $UNITY_HOME/Contents/MacOS/Unity -batchmode -nographics -projectPath . -buildTarget iOS -logFile unity-ios-build.log -quit
       - name: Instalar pods si usas (opcional para AR Foundation simple)
         script: |
           cd $XCODE_PROJECT/..
